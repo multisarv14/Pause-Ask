@@ -1,0 +1,72 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // Shape of users/{uid}. Only these fields, with these types.
+    function isValidUser(d) {
+      return d.keys().hasOnly(['name', 'phone', 'roles', 'language', 'largeText',
+                               'consentVersion', 'consentAcceptedAt', 'fcmToken',
+                               'createdAt'])
+        && d.keys().hasAll(['name', 'phone', 'roles', 'language', 'largeText',
+                            'consentVersion', 'consentAcceptedAt', 'createdAt'])
+        && d.name is string && d.name.size() > 0 && d.name.size() <= 50
+        && d.phone is string
+        && d.roles is list && d.roles.size() >= 1 && d.roles.size() <= 2
+        && d.roles.hasOnly(['protected', 'guardian'])
+        && d.language in ['en', 'hi', 'mr']
+        && d.largeText is bool
+        && d.consentVersion is int && d.consentVersion >= 1
+        && d.consentAcceptedAt is timestamp
+        && (!('fcmToken' in d) || d.fcmToken == null
+            || (d.fcmToken is string && d.fcmToken.size() <= 4096))
+        && d.createdAt is timestamp;
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+
+      allow create: if isOwner(uid)
+        && isValidUser(request.resource.data)
+        && request.resource.data.phone == request.auth.token.phone_number
+        && request.resource.data.createdAt == request.time;
+
+      // phone and createdAt can never change.
+      allow update: if isOwner(uid)
+        && isValidUser(request.resource.data)
+        && request.resource.data.phone == resource.data.phone
+        && request.resource.data.createdAt == resource.data.createdAt;
+
+      // Account deletion will go through a Cloud Function later.
+      allow delete: if false;
+    }
+
+    // Circles: members can read; all writes go through Cloud Functions
+    // (Admin SDK bypasses these rules). The client finds its circle with
+    // where('memberUids', arrayContains: uid), which this rule allows.
+    match /circles/{circleId} {
+      allow read: if request.auth != null
+        && request.auth.uid in resource.data.memberUids;
+      allow write: if false;
+
+      match /members/{memberUid} {
+        allow read: if request.auth != null
+          && request.auth.uid in
+             get(/databases/$(database)/documents/circles/$(circleId)).data.memberUids;
+        allow write: if false;
+      }
+    }
+
+    // invites, memberships, joinAttempts, checks, usage: functions only
+    // (denied below). Guardian/history access to checks comes in a later step.
+
+    // Everything else stays locked.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

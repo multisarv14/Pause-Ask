@@ -1,0 +1,165 @@
+{
+  "@@locale": "en",
+  "appName": "PauseAsk",
+  "@appName": {
+    "description": "Brand name. Do not translate."
+  },
+  "appSubtitle": "Family Scam Check",
+  "tagline": "Pause. Ask family. Stay safe.",
+  "largeText": "Large text",
+  "largeTextHint": "Make all text bigger and easier to read",
+  "languageTitle": "Choose your language",
+  "languageSubtitle": "You can change this later.",
+  "onboardingSlide1Title": "Got a suspicious message? Pause.",
+  "onboardingSlide1Body": "Don't open links, share an OTP or send money in a hurry. Show the message to PauseAsk first.",
+  "onboardingSlide2Title": "Ask your family in one tap",
+  "onboardingSlide2Body": "We explain the risk in simple words, and your family gets an alert right away so they can help.",
+  "onboardingSlide3Title": "Daily \"I'm OK\" keeps family at peace",
+  "onboardingSlide3Body": "One tap a day tells your family you're fine. If you miss it, they'll know to check on you.",
+  "next": "Next",
+  "skip": "Skip",
+  "getStarted": "Get started",
+  "privacyTitle": "Your privacy",
+  "privacyIntro": "Before you start, here is what PauseAsk keeps and why.",
+  "privacyPointData": "We save your name, phone number and your family circle.",
+  "privacyPointChecks": "When you check a message, only its text is sent. Phone numbers, OTPs and account numbers are hidden first.",
+  "privacyPointDelete": "Your checks are deleted automatically after 30 days.",
+  "privacyPointAi": "The AI can make mistakes. It never says a message is safe — when in doubt, ask your family.",
+  "privacyAgree": "I agree",
+  "privacyAgreeHint": "You need to agree to use PauseAsk.",
+  "loginTitle": "Log in with your phone number",
+  "loginSubtitle": "We'll send a 6-digit code by SMS.",
+  "countryCodeLabel": "Country code",
+  "phoneLabel": "Phone number",
+  "sendCode": "Send code",
+  "otpTitle": "Enter the code",
+  "otpSentTo": "We sent a 6-digit code to {phone}.",
+  "@otpSentTo": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "otpLabel": "6-digit code",
+  "verify": "Verify",
+  "resendCode": "Resend code",
+  "resendIn": "You can resend the code in {seconds} seconds",
+  "@resendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "changeNumber": "Change number",
+  "errorInvalidPhone": "That phone number doesn't look right. Please check it.",
+  "errorWrongCode": "That code is wrong. Please check the SMS and try again.",
+  "errorCodeExpired": "This code has expired. Please ask for a new one.",
+  "errorTooManyAttempts": "Too many attempts. Please wait a while and try again.",
+  "errorNetwork": "No internet connection. Please check and try again.",
+  "errorGeneric": "Something went wrong. Please try again.",
+  "profileTitle": "Tell us about you",
+  "nameLabel": "Your name",
+  "nameRequired": "Please enter your name.",
+  "roleQuestion": "How will you use PauseAsk?",
+  "roleProtected": "I want protection",
+  "roleProtectedHint": "Check suspicious messages and get help from family.",
+  "roleGuardian": "I protect my family",
+  "roleGuardianHint": "Get alerts and reply with one tap.",
+  "roleBoth": "Both",
+  "roleBothHint": "Stay protected and protect others too.",
+  "roleRequired": "Please choose one option.",
+  "continueButton": "Continue",
+  "homeGreeting": "Hello, {name}",
+  "@homeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeProtectedText": "If a message worries you, pause and check it here. Your family will be told right away.",
+  "homeGuardianText": "You'll get an alert when someone in your family needs help with a message.",
+  "homeBothText": "Check your own messages, and help your family when they ask.",
+  "homeComingSoon": "More features are coming soon.",
+  "changeLanguage": "Change language",
+  "logout": "Log out",
+  "loading": "Loading…",
+  "profileLoadError": "Couldn't load your profile.",
+  "tryAgain": "Try again",
+  "myCircle": "My family circle",
+  "circleTitle": "Family circle",
+  "noCircleTitle": "You're not in a family circle yet",
+  "noCircleBody": "Create a circle and invite your family, or join one with a code you received.",
+  "createCircle": "Create a circle",
+  "joinWithCode": "Join with code",
+  "circleNameLabel": "Circle name",
+  "circleNameHint": "e.g. Patil Family",
+  "circleNameRequired": "Please enter a name for your circle.",
+  "createCircleButton": "Create",
+  "joinCodeLabel": "6-character code",
+  "joinCodeHelp": "Ask a family member to send you the code from their PauseAsk app.",
+  "joinButton": "Join",
+  "membersCount": "Members: {count} / {max}",
+  "@membersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "badgeOwner": "Owner",
+  "badgeProtected": "Protected",
+  "badgeGuardian": "Guardian",
+  "badgeYou": "You",
+  "inviteFamily": "Invite family",
+  "inviteCodeTitle": "Invite code",
+  "inviteCodeExplain": "Share this code with your family. It works for 7 days.",
+  "inviteViaWhatsApp": "Invite via WhatsApp",
+  "shareOtherWay": "Share another way",
+  "copyCode": "Copy code",
+  "codeCopied": "Code copied",
+  "whatsappNotInstalled": "WhatsApp isn't installed. Please use \"Share another way\".",
+  "inviteMessage": "Hi! I've started using PauseAsk to stay safe from scams. Please join our family circle \"{circleName}\" so I can check with you before acting on a suspicious message.\n\n1. Install PauseAsk: {link}\n2. Open it and tap \"Join with code\"\n3. Enter this code: {code}\n\nThe code works for 7 days.",
+  "@inviteMessage": {
+    "description": "WhatsApp/share invite text. Keep the numbered steps.",
+    "placeholders": {
+      "circleName": {
+        "type": "String"
+      },
+      "code": {
+        "type": "String"
+      },
+      "link": {
+        "type": "String"
+      }
+    }
+  },
+  "leaveCircle": "Leave circle",
+  "leaveConfirmTitle": "Leave this circle?",
+  "leaveConfirmBody": "Your family will no longer get your alerts.",
+  "leaveConfirmOwnerBody": "You are the owner. The member who joined earliest will become the new owner. If you are the only member, the circle will be deleted.",
+  "removeMember": "Remove",
+  "removeConfirmTitle": "Remove {name} from the circle?",
+  "@removeConfirmTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "removeConfirmBody": "They will stop getting alerts from this circle.",
+  "cancel": "Cancel",
+  "circleErrorAlreadyInCircle": "You're already in a family circle. You can be in only one circle.",
+  "circleErrorFull": "This circle is full (max 5 members).",
+  "circleErrorInvalidCode": "That code doesn't match any circle. Please check it and try again.",
+  "circleErrorCodeExpired": "This code has expired. Ask your family for a new one.",
+  "circleErrorCodeUsedUp": "This code can't be used any more. Ask your family for a new one.",
+  "circleErrorAlreadyMember": "You're already in this circle.",
+  "circleErrorNotOwner": "Only the circle owner can do this.",
+  "circleErrorTooManyAttempts": "Too many wrong codes. Please wait an hour and try again."
+}

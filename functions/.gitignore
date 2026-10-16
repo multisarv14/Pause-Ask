@@ -1,0 +1,7 @@
+node_modules/
+lib/
+*.log
+# Local-only overrides and emulator secrets (e.g. GEMINI_API_KEY=...)
+.env.local
+.secret.local
+.runtimeconfig.json
