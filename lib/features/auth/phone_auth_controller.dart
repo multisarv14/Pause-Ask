@@ -3,6 +3,14 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import '../../core/l10n/language_provider.dart';
+import '../../core/storage/preferences.dart';
+import '../../core/theme/text_scale_provider.dart';
+import '../../services/notifications/notification_service.dart';
+import '../../services/share/share_intent_listener.dart';
+import '../onboarding/onboarding_providers.dart';
 import 'auth_error.dart';
 import 'auth_providers.dart';
 
@@ -131,8 +139,30 @@ class PhoneAuthController extends Notifier<PhoneAuthState> {
     }
   }
 
-  Future<void> signOut() async {
+  /// Logs out and clears this user's local data (reminder, cached flags).
+  /// [forgetDevice] (after account deletion) also forgets language,
+  /// onboarding and consent, so the app starts from the beginning.
+  Future<void> signOut({bool forgetDevice = false}) async {
+    final uid = _auth.currentUser?.uid;
+    if (uid != null) await unregisterDevice(ref, uid);
+    try {
+      await FlutterLocalNotificationsPlugin().cancelAll();
+    } catch (_) {}
+    final prefs = ref.read(sharedPreferencesProvider);
+    if (forgetDevice) {
+      await prefs.clear();
+    } else {
+      await prefs.remove(PrefKeys.lastAppCheckinMs);
+      await prefs.remove(PrefKeys.batteryGuideShown);
+    }
     await _auth.signOut();
+    ref
+      ..invalidate(shownResponsesProvider)
+      ..invalidate(pendingShareProvider)
+      ..invalidate(languageProvider)
+      ..invalidate(onboardingDoneProvider)
+      ..invalidate(consentProvider)
+      ..invalidate(largeTextProvider);
     ref.invalidateSelf();
   }
 }

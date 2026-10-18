@@ -1,11 +1,31 @@
 import 'package:flutter/foundation.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/auth_providers.dart';
 import '../../features/auth/otp_screen.dart';
 import '../../features/auth/phone_login_screen.dart';
+import '../../features/check/check_models.dart';
+import '../../features/check/checking_screen.dart';
+import '../../features/check/compose_screen.dart';
+import '../../features/check/ocr_screen.dart';
+import '../../features/check/result_screen.dart';
+import '../../features/check/voice_screen.dart';
+import '../../features/check/guardian_response_screen.dart';
+import '../../features/checkin/checkin_settings_screen.dart';
 import '../../features/circle/circle_screen.dart';
+import '../../features/legal/legal_content.dart';
+import '../../features/legal/legal_screen.dart';
+import '../../features/settings/delete_account_screen.dart';
+import '../../features/settings/settings_screen.dart';
+import '../errors/app_errors.dart';
+import '../../features/feed/feed_widgets.dart';
+import '../../features/history/history_screens.dart';
+import '../../features/settings/battery_guide_screen.dart';
+import '../../features/sos/sos_repository.dart';
+import '../../features/sos/sos_screens.dart';
+import '../../features/guardian/guardian_alert_screen.dart';
 import '../../features/circle/create_circle_screen.dart';
 import '../../features/circle/invite_screen.dart';
 import '../../features/circle/join_circle_screen.dart';
@@ -46,6 +66,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
   final router = GoRouter(
     initialLocation: AppRoutes.splash,
+    // Unknown links (e.g. an old notification) get the friendly screen.
+    errorBuilder: (context, state) => const FriendlyErrorView(),
     refreshListenable: refresh,
     redirect: (context, state) =>
         redirectForStep(ref.read(startupStepProvider), state.matchedLocation),
@@ -80,6 +102,97 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.home,
         builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.check,
+        builder: (context, state) =>
+            ComposeScreen(draft: state.extra as CheckDraft?),
+        routes: [
+          GoRoute(
+            path: 'voice',
+            builder: (context, state) => const VoiceScreen(),
+          ),
+          GoRoute(
+            path: 'ocr',
+            builder: (context, state) =>
+                OcrScreen(imagePath: state.extra! as String),
+          ),
+          GoRoute(
+            path: 'run',
+            builder: (context, state) =>
+                CheckingScreen(draft: state.extra! as CheckDraft),
+          ),
+          GoRoute(
+            path: 'response/:checkId',
+            builder: (context, state) => GuardianResponseScreen(
+              checkId: state.pathParameters['checkId']!,
+            ),
+          ),
+          GoRoute(
+            path: 'result',
+            builder: (context, state) =>
+                ResultScreen(outcome: state.extra! as CheckOutcome),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: AppRoutes.settings,
+        builder: (context, state) => const SettingsScreen(),
+        routes: [
+          GoRoute(
+            path: 'delete-account',
+            builder: (context, state) => const DeleteAccountScreen(),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/legal/:doc',
+        builder: (context, state) => LegalScreen(
+          doc: LegalDoc.values.byName(state.pathParameters['doc']!),
+        ),
+      ),
+      if (kDebugMode)
+        GoRoute(
+          path: AppRoutes.crashTest,
+          builder: (context, state) => const CrashTestScreen(),
+        ),
+      GoRoute(
+        path: AppRoutes.history,
+        builder: (context, state) => const HistoryScreen(),
+        routes: [
+          GoRoute(
+            path: ':checkId',
+            builder: (context, state) =>
+                CheckDetailScreen(checkId: state.pathParameters['checkId']!),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: AppRoutes.feed,
+        builder: (context, state) => const FeedScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.sosSent,
+        builder: (context, state) =>
+            SosSentScreen(result: state.extra! as SosResult),
+      ),
+      GoRoute(
+        path: '/guardian/sos/:uid',
+        builder: (context, state) =>
+            SosAlertScreen(memberUid: state.pathParameters['uid']!),
+      ),
+      GoRoute(
+        path: AppRoutes.checkinSettings,
+        builder: (context, state) => const CheckinSettingsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.batteryGuide,
+        builder: (context, state) => const BatteryGuideScreen(),
+      ),
+      GoRoute(
+        path: '/guardian/check/:checkId',
+        builder: (context, state) =>
+            GuardianAlertScreen(checkId: state.pathParameters['checkId']!),
       ),
       GoRoute(
         path: AppRoutes.circle,

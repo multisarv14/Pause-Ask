@@ -14,3 +14,8 @@ final authStateProvider = StreamProvider<User?>((ref) {
   if (!ref.watch(firebaseReadyProvider)) return Stream.value(null);
   return ref.watch(firebaseAuthProvider).authStateChanges();
 });
+
+/// The signed-in uid, or null (overridable in tests).
+final currentUidProvider = Provider<String?>(
+  (ref) => ref.watch(authStateProvider).value?.uid,
+);

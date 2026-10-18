@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/utils/share_text.dart';
 import '../../core/widgets/error_text.dart';
 import '../../l10n/app_localizations.dart';
 import 'circle_error.dart';
@@ -26,14 +26,7 @@ class InviteScreen extends ConsumerWidget {
   Future<void> _shareOnWhatsApp(BuildContext context, String text) async {
     final l10n = AppLocalizations.of(context);
     final messenger = ScaffoldMessenger.of(context);
-    final uri = Uri.parse('whatsapp://send?text=${Uri.encodeComponent(text)}');
-    var opened = false;
-    try {
-      opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } on PlatformException {
-      opened = false;
-    }
-    if (!opened) {
+    if (!await shareOnWhatsApp(text)) {
       messenger.showSnackBar(
         SnackBar(content: Text(l10n.whatsappNotInstalled)),
       );

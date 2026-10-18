@@ -2,15 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/constants/app_constants.dart';
 import '../auth/auth_providers.dart';
 import 'circle_models.dart';
+import '../../services/firebase/firebase_bootstrap.dart';
 
 final circleRepositoryProvider = Provider<CircleRepository>(
-  (ref) => CircleRepository(
-    FirebaseFirestore.instance,
-    FirebaseFunctions.instanceFor(region: AppConstants.firebaseRegion),
-  ),
+  (ref) => CircleRepository(FirebaseFirestore.instance, appFunctions()),
 );
 
 /// The circle the signed-in user belongs to (max 1), or null.

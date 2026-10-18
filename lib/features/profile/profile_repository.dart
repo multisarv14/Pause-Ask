@@ -58,4 +58,8 @@ class ProfileRepository {
     String? language,
     bool? largeText,
   }) => _doc(uid).update({'language': ?language, 'largeText': ?largeText});
+
+  /// Device token for guardian alerts; null on logout.
+  Future<void> updateFcmToken(String uid, String? token) =>
+      _doc(uid).update({'fcmToken': token});
 }

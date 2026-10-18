@@ -13,4 +13,6 @@ abstract final class PrefKeys {
   static const onboardingDone = 'onboarding_done';
   static const consentVersion = 'consent_version';
   static const consentAcceptedAt = 'consent_accepted_at_ms';
+  static const lastAppCheckinMs = 'last_app_checkin_ms';
+  static const batteryGuideShown = 'battery_guide_shown';
 }

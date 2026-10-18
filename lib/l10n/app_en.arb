@@ -71,18 +71,7 @@
   "roleBothHint": "Stay protected and protect others too.",
   "roleRequired": "Please choose one option.",
   "continueButton": "Continue",
-  "homeGreeting": "Hello, {name}",
-  "@homeGreeting": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "homeProtectedText": "If a message worries you, pause and check it here. Your family will be told right away.",
   "homeGuardianText": "You'll get an alert when someone in your family needs help with a message.",
-  "homeBothText": "Check your own messages, and help your family when they ask.",
-  "homeComingSoon": "More features are coming soon.",
   "changeLanguage": "Change language",
   "logout": "Log out",
   "loading": "Loading…",
@@ -161,5 +150,329 @@
   "circleErrorCodeUsedUp": "This code can't be used any more. Ask your family for a new one.",
   "circleErrorAlreadyMember": "You're already in this circle.",
   "circleErrorNotOwner": "Only the circle owner can do this.",
-  "circleErrorTooManyAttempts": "Too many wrong codes. Please wait an hour and try again."
+  "circleErrorTooManyAttempts": "Too many wrong codes. Please wait an hour and try again.",
+  "pauseAndAsk": "Pause & Ask",
+  "pauseAndAskHint": "Got a message you're not sure about? Check it here.",
+  "tellUsWhatHappened": "Tell us what happened",
+  "pasteOrType": "Paste / type message",
+  "pickScreenshot": "Pick a screenshot",
+  "shareTip": "Tip: In WhatsApp or SMS, press and hold the message → Share → PauseAsk.",
+  "chooseHowTitle": "How do you want to check?",
+  "settingsTitle": "Settings",
+  "composeTitle": "Check a message",
+  "composeHint": "Paste or type the message here",
+  "composeConfirmHint": "Look at the text below. You can correct it before checking.",
+  "pasteButton": "Paste",
+  "checkNow": "Check now",
+  "textEmpty": "Please paste or type a message first.",
+  "textTooLong": "This message is too long. Please keep only the important part (up to {max} characters).",
+  "@textTooLong": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "readingScreenshot": "Reading the screenshot…",
+  "ocrNoText": "We couldn't find any text in this picture. Please try another screenshot or type the message.",
+  "imageStaysOnPhone": "The picture stays on your phone. Only the text is checked.",
+  "voiceIntro": "Tap the microphone and say what the message or the caller said.",
+  "voiceListening": "Listening… speak now",
+  "voiceTapToStart": "Tap to speak",
+  "voiceTapToStop": "Tap to stop",
+  "voiceUseText": "Use this text",
+  "voiceNotAvailable": "Voice input for this language isn't available on this phone. Download it in the Google app → Settings → Voice → Offline speech recognition, or type the message.",
+  "micPermissionDenied": "PauseAsk needs microphone permission to hear you. You can allow it in your phone's Settings.",
+  "voiceNothingHeard": "We didn't hear anything. Please try again.",
+  "checkingTitle": "Checking…",
+  "checkingReminder": "Meanwhile, don't send money and don't share any OTP.",
+  "riskHigh": "High risk",
+  "riskSuspicious": "Suspicious",
+  "riskBeCareful": "Be careful",
+  "riskSemantics": "Result: {level}",
+  "@riskSemantics": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "redFlagsTitle": "Warning signs",
+  "whatToDoTitle": "What to do now",
+  "readAloud": "Read aloud",
+  "stopReading": "Stop reading",
+  "ttsVoiceMissing": "No voice is installed for this language. Install it in your phone's Settings → Text-to-speech.",
+  "resultDisclaimer": "PauseAsk can make mistakes. Only your family can tell you a message is OK.",
+  "done": "Done",
+  "checkAnother": "Check another message",
+  "checkErrorDailyLimit": "You've used all 10 checks for today. If you're worried, call a family member now. You can check again tomorrow.",
+  "checkErrorNetwork": "No internet connection. Please turn on mobile data or Wi-Fi and try again. Until then, don't send money or share an OTP.",
+  "checkErrorGeneric": "We couldn't check this message right now. Please try again. If you're worried, call a family member.",
+  "goBack": "Go back",
+  "guardianAlertTitle": "Family needs help",
+  "askedBy": "{name} asked at {time}",
+  "@askedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "maskedMessageTitle": "The message (private details hidden)",
+  "respondStop": "STOP – don't do anything, I'll call you",
+  "respondOk": "I checked – it's OK",
+  "respondCall": "Call now",
+  "replySent": "Your reply was sent to {name}.",
+  "@replySent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "alreadyAnswered": "Already answered by {name}: {reply}",
+  "@alreadyAnswered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "reply": {
+        "type": "String"
+      }
+    }
+  },
+  "responseLabelStop": "STOP",
+  "responseLabelOk": "It's OK",
+  "responseLabelCall": "Calling",
+  "noPhone": "Phone number not available.",
+  "responseStopBody": "Don't do anything. Don't send money or share any OTP. {name} will call you.",
+  "@responseStopBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "responseOkBody": "{name} checked this message: it's OK.",
+  "@responseOkBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "responseCallTitle": "Pick up the phone",
+  "responseCallBody": "{name} is calling you now. Don't do anything until you've talked.",
+  "@responseCallBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "closeButton": "Close",
+  "familyAlerting": "Alerting your family…",
+  "familyAlerted": "Your family has been alerted.",
+  "familyNoGuardian": "Nobody in your circle can reply yet. Ask a family member to join as a guardian.",
+  "familyAddToGetHelp": "Add family to get help.",
+  "familyReplied": "{name} replied: {reply}",
+  "@familyReplied": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "reply": {
+        "type": "String"
+      }
+    }
+  },
+  "viewReply": "Open reply",
+  "openRequestsTitle": "Family requests",
+  "noOpenRequests": "No open requests. You'll get a notification when someone needs help.",
+  "memberStatusTitle": "Family status",
+  "channelAlertsName": "Family alerts",
+  "channelAlertsDescription": "When family asks for help or replies to you",
+  "channelGeneralName": "General",
+  "sosButton": "I need help now",
+  "sosHoldHint": "Press and hold for 2 seconds",
+  "sosSending": "Sending SOS…",
+  "sosAlerted": "Your family has been alerted",
+  "sosNoGuardian": "Nobody in your family circle could be alerted. Please call someone you trust now.",
+  "sosCallGuardian": "Call {name}",
+  "@sosCallGuardian": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sosCall1930": "Call 1930 – Cyber Crime Helpline",
+  "sos1930Explain": "Call 1930 if money was taken or you shared bank details or an OTP. Calling quickly can help stop the money.",
+  "sosLimit": "You've sent SOS 5 times in the last hour. Please call your family directly.",
+  "sosFailed": "SOS could not be sent. Please call your family directly.",
+  "sosAlertTitle": "{name} needs help now",
+  "@sosAlertTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sosAlertBody": "{name} pressed the SOS button. Please call them right away.",
+  "@sosAlertBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callButton": "Call",
+  "checkinTitle": "Daily \"I'm OK\"",
+  "checkinExplain": "Every day at this time we'll remind you to tell your family you're OK. If you don't, they get one gentle alert.",
+  "checkinEnabled": "Daily check-in",
+  "checkinTime": "Reminder time",
+  "checkinAlertAfter": "Alert family if no check-in after",
+  "hoursCount": "{count, plural, =1{1 hour} other{{count} hours}}",
+  "@hoursCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "checkinChangeNote": "Changes to family alerts apply from tomorrow.",
+  "saveButton": "Save",
+  "saved": "Saved",
+  "checkinReminderMorning": "Good morning! Tap to tell your family you're OK 👍",
+  "checkinReminderOther": "Hello! Tap to tell your family you're OK 👍",
+  "checkinThanks": "Thank you! Your family knows you're OK today.",
+  "statusOkAt": "OK today at {time}",
+  "@statusOkAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "statusNotYet": "Not yet today",
+  "statusMissed": "Missed today's check-in",
+  "statusOff": "Daily check-in is off",
+  "batteryGuideTitle": "Make sure alerts reach you",
+  "batteryGuideIntro": "Some phones stop apps in the background to save battery. Then family alerts can arrive late or not at all. Please do these 2 quick steps:",
+  "batteryStepNotifications": "1. Allow notifications for PauseAsk",
+  "batteryStepBattery": "2. Set battery to \"No restrictions\" / \"Don't optimise\" for PauseAsk",
+  "batteryStepAutostart": "On some phones also turn on \"Autostart\" for PauseAsk in the app settings.",
+  "openNotificationSettings": "Open notification settings",
+  "openBatterySettings": "Open battery settings",
+  "openAppSettings": "Open app settings",
+  "notificationHelp": "Notification help",
+  "historyTitleMine": "My checks",
+  "historyTitleFamily": "Family checks",
+  "historyAutoDelete": "Checks are automatically deleted after 30 days.",
+  "historyEmptyTitle": "No checks yet",
+  "historyEmptyBody": "When a message worries you, tap \"Pause & Ask\". Your checks will appear here.",
+  "historyEmptyFamily": "No checks from your family yet. You'll get a notification when someone asks.",
+  "deleteButton": "Delete",
+  "deleteCheckConfirm": "Delete this check?",
+  "deleteCheckBody": "It will be removed for you and your family.",
+  "deletedMessage": "Deleted",
+  "noReplyYet": "No reply yet",
+  "checkDetailTitle": "Check details",
+  "replyButton": "Reply",
+  "feedCardTitle": "Scam alert of the day",
+  "seeAll": "See all",
+  "feedTitle": "Scam alerts",
+  "feedEmpty": "No alerts right now. Please check back soon.",
+  "shareAlert": "Share this alert",
+  "sharePromo": "Protect your family with PauseAsk: {link}",
+  "@sharePromo": {
+    "placeholders": {
+      "link": {
+        "type": "String"
+      }
+    }
+  },
+  "readMore": "Read more",
+  "showLess": "Show less",
+  "greetingMorning": "Good morning, {name}",
+  "@greetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "greetingAfternoon": "Good afternoon, {name}",
+  "@greetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "greetingEvening": "Good evening, {name}",
+  "@greetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "checkinDoneToday": "Your family knows you're OK today ({time})",
+  "@checkinDoneToday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "checkinNotYetToday": "Tell your family you're OK today",
+  "imOkButton": "I'm OK 👍",
+  "settingsGeneral": "General",
+  "settingsFamily": "Family & alerts",
+  "settingsHelp": "Help & legal",
+  "settingsAccount": "Account",
+  "rolesTitle": "My role",
+  "rolesSaved": "Role updated",
+  "testAlert": "Send me a test alert",
+  "testAlertSent": "Test alert sent. It should arrive in a few seconds.",
+  "testAlertNoDevice": "This phone isn't set up for alerts yet. Allow notifications, then close and open PauseAsk again.",
+  "privacyPolicy": "Privacy policy",
+  "termsTitle": "Terms of use",
+  "helpFaq": "Help & FAQ",
+  "contactSupport": "Contact support",
+  "noEmailApp": "No email app found. Please write to {email}.",
+  "@noEmailApp": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "appVersion": "Version {version}",
+  "@appVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "readFullOnline": "Read the full version online",
+  "deleteAccount": "Delete account",
+  "deleteAccountIntro": "This permanently deletes:",
+  "deleteItemProfile": "Your profile: name, phone number and settings",
+  "deleteItemChecks": "All your checks and their results",
+  "deleteItemCheckins": "Your daily check-in and SOS data",
+  "deleteItemCircle": "Your place in the family circle. If you created it, the member who joined earliest becomes the owner.",
+  "deleteItemLogin": "Your sign-in",
+  "deleteKeptNote": "Replies you gave to your family stay on their checks, without your name.",
+  "deleteTypeHint": "Type DELETE to confirm",
+  "deleteForever": "Delete my account",
+  "deleteFailed": "Couldn't delete your account right now. Please check your internet and try again.",
+  "errorScreenTitle": "Something went wrong",
+  "errorScreenBody": "Sorry, this part of PauseAsk had a problem. Your information is not affected. Please go back and try again.",
+  "goHome": "Go to home"
 }

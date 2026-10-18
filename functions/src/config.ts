@@ -18,4 +18,5 @@ export const LIMITS = {
   maxCheckTextLength: 4000,
   checkRetentionDays: 30,
   llmTimeoutMs: 25_000,
+  sosPerHour: 5,
 } as const;

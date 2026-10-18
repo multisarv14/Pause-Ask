@@ -2,18 +2,19 @@ import "../setup";
 
 import { FieldValue, Timestamp, getFirestore } from "firebase-admin/firestore";
 import * as logger from "firebase-functions/logger";
-import { onCall } from "firebase-functions/v2/https";
 
+import { recordCheckin } from "../checkins/checkins";
 import { LIMITS } from "../config";
 import { requireUid } from "../lib/auth";
+import { callable } from "../lib/callable";
 import { fail } from "../lib/errors";
 import { istDayKey } from "../lib/istDay";
 import { maskText } from "../lib/masking";
 import { refs } from "../lib/refs";
+import { parse, schemas } from "../lib/validation";
 import { GEMINI_API_KEY, createLlmProvider } from "../llm/provider";
 import {
   CheckResult,
-  LANGUAGES,
   Language,
   checkResultJsonSchema,
   fallbackResult,
@@ -21,7 +22,6 @@ import {
 } from "./checkResult";
 import { CheckSource, buildSystemPrompt, buildUserPrompt } from "./prompt";
 
-const SOURCES: readonly CheckSource[] = ["share", "image", "voice", "typed"];
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 interface CheckInput {
@@ -34,13 +34,8 @@ function parseInput(data: unknown): CheckInput {
   const d = (data ?? {}) as Record<string, unknown>;
   if (typeof d.text !== "string" || d.text.trim().length === 0) fail("INVALID_TEXT");
   if (d.text.length > LIMITS.maxCheckTextLength) fail("TEXT_TOO_LONG");
-  if (!SOURCES.includes(d.source as CheckSource)) fail("INVALID_ARGUMENT");
-  if (!LANGUAGES.includes(d.language as Language)) fail("INVALID_ARGUMENT");
-  return {
-    text: d.text.trim(),
-    source: d.source as CheckSource,
-    language: d.language as Language,
-  };
+  const { source, language } = parse(schemas.analyzeCheck, data);
+  return { text: d.text.trim(), source, language };
 }
 
 /** Counts this check against today's (Asia/Kolkata) limit, atomically. */
@@ -73,8 +68,7 @@ function describeError(e: unknown) {
  * Masks private data, asks the AI for a risk level (never "safe") and
  * stores the check for 30 days. The raw text is never logged or stored.
  */
-export const analyzeCheck = onCall(
-  { secrets: [GEMINI_API_KEY], timeoutSeconds: 60, memory: "512MiB" },
+export const analyzeCheck = callable(
   async (req) => {
     const uid = requireUid(req);
     const input = parseInput(req.data);
@@ -122,6 +116,9 @@ export const analyzeCheck = onCall(
       guardianResponse: null,
     });
 
+    // Doing a check also means "I'm OK" today.
+    await recordCheckin(uid).catch(() => undefined);
+
     // Metadata only: no message text, masked or not.
     logger.info("check analyzed", {
       uid,
@@ -138,4 +135,5 @@ export const analyzeCheck = onCall(
 
     return { checkId: checkRef.id, result };
   },
+  { secrets: [GEMINI_API_KEY], timeoutSeconds: 60, memory: "512MiB" },
 );

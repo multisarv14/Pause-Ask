@@ -25,3 +25,9 @@ export {
 } from "./circles/circles";
 
 export { analyzeCheck } from "./checks/analyzeCheck";
+export { onCheckCreated, respondToCheck } from "./checks/guardianAlerts";
+export { checkIn, checkMissedCheckins, saveCheckinSettings } from "./checkins/checkins";
+export { sendSos } from "./sos/sos";
+export { deleteCheck } from "./checks/deleteCheck";
+export { weeklyFeedPush } from "./feed/feedPush";
+export { deleteMyAccount, sendTestAlert, updateRoles } from "./account/account";

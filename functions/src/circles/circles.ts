@@ -8,18 +8,22 @@ import {
   Transaction,
   getFirestore,
 } from "firebase-admin/firestore";
-import { onCall } from "firebase-functions/v2/https";
 
 import { LIMITS } from "../config";
 import { requireUid } from "../lib/auth";
+import { callable } from "../lib/callable";
 import { fail, isReason } from "../lib/errors";
 import { generateInviteCode, normalizeInviteCode } from "../lib/inviteCode";
 import { refs } from "../lib/refs";
+import { parse, schemas } from "../lib/validation";
 
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;
 
-/** The member doc copies name + roles from users/{uid}. */
+/**
+ * The member doc copies name, roles and phone from users/{uid}. Phone is
+ * shared inside the circle so a guardian can tap "Call now".
+ */
 async function readProfile(tx: Transaction, uid: string) {
   const snap = await tx.get(refs.user(uid));
   if (!snap.exists) fail("PROFILE_MISSING");
@@ -27,6 +31,19 @@ async function readProfile(tx: Transaction, uid: string) {
   return {
     name: typeof data.name === "string" ? data.name : "",
     roles: Array.isArray(data.roles) ? (data.roles as string[]) : [],
+    phone: typeof data.phone === "string" ? data.phone : "",
+    ...(data.checkin
+      ? {
+          checkin: {
+            enabled: data.checkin.enabled === true,
+            time: data.checkin.time ?? null,
+            timezone: data.checkin.timezone ?? null,
+            alertAfterHours: data.checkin.alertAfterHours ?? null,
+            lastCheckinAt: data.checkin.lastCheckinAt ?? null,
+            lastMissedAlertDate: data.checkin.lastMissedAlertDate ?? null,
+          },
+        }
+      : {}),
   };
 }
 
@@ -44,7 +61,7 @@ function addMember(
   tx: Transaction,
   circleId: string,
   uid: string,
-  profile: { name: string; roles: string[] },
+  profile: { name: string; roles: string[]; phone: string; checkin?: object },
 ) {
   const now = FieldValue.serverTimestamp();
   tx.create(refs.member(circleId, uid), { ...profile, joinedAt: now });
@@ -57,12 +74,9 @@ function removeMemberDocs(tx: Transaction, circleId: string, uid: string) {
 }
 
 /** createCircle({ name }) → { circleId } */
-export const createCircle = onCall(async (req) => {
+export const createCircle = callable(async (req) => {
   const uid = requireUid(req);
-  const name = typeof req.data?.name === "string" ? req.data.name.trim() : "";
-  if (name.length < 1 || name.length > LIMITS.maxCircleNameLength) {
-    fail("INVALID_NAME");
-  }
+  const { name } = parse(schemas.createCircle, req.data, "INVALID_NAME");
 
   const circleRef = refs.circles().doc();
   await getFirestore().runTransaction(async (tx) => {
@@ -85,7 +99,7 @@ export const createCircle = onCall(async (req) => {
  * Any member may invite. Re-uses the circle's current invite while it has
  * at least a day left, so families keep seeing the same code.
  */
-export const createInvite = onCall(async (req) => {
+export const createInvite = callable(async (req) => {
   const uid = requireUid(req);
   const membership = await refs.membership(uid).get();
   if (!membership.exists) fail("NOT_IN_CIRCLE");
@@ -165,11 +179,13 @@ async function recordJoinFailure(uid: string) {
 }
 
 /** joinCircle({ code }) → { circleId } */
-export const joinCircle = onCall(async (req) => {
+export const joinCircle = callable(async (req) => {
   const uid = requireUid(req);
   await checkJoinRateLimit(uid);
 
-  const code = normalizeInviteCode(req.data?.code);
+  const code = normalizeInviteCode(
+    schemas.joinCircle.safeParse(req.data ?? {}).data?.code,
+  );
   try {
     if (!code) fail("INVALID_CODE");
     const circleId = await getFirestore().runTransaction(async (tx) => {
@@ -215,8 +231,10 @@ export const joinCircle = onCall(async (req) => {
  * If the owner leaves, ownership passes to the member who joined earliest.
  * If the last member leaves, the circle, its members and invites are deleted.
  */
-export const leaveCircle = onCall(async (req) => {
-  const uid = requireUid(req);
+export const leaveCircle = callable(async (req) => leaveCircleFor(requireUid(req)));
+
+/** Shared by leaveCircle and deleteMyAccount. Throws NOT_IN_CIRCLE. */
+export async function leaveCircleFor(uid: string) {
   return getFirestore().runTransaction(async (tx) => {
     const circleId = await requireCircleId(tx, uid);
     const circleRef = refs.circle(circleId);
@@ -248,13 +266,12 @@ export const leaveCircle = onCall(async (req) => {
     removeMemberDocs(tx, circleId, uid);
     return { circleDeleted: false, newOwnerUid };
   });
-});
+}
 
 /** removeMember({ uid }) → { removed: true }. Owner only. */
-export const removeMember = onCall(async (req) => {
+export const removeMember = callable(async (req) => {
   const uid = requireUid(req);
-  const target = req.data?.uid;
-  if (typeof target !== "string" || target.length === 0) fail("INVALID_ARGUMENT");
+  const { uid: target } = parse(schemas.removeMember, req.data);
   if (target === uid) fail("CANNOT_REMOVE_SELF");
 
   await getFirestore().runTransaction(async (tx) => {

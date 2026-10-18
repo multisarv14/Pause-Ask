@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../checkin/checkin_models.dart';
+
 /// `circles/{circleId}`
 class Circle {
   const Circle({
@@ -31,7 +33,9 @@ class CircleMember {
     required this.uid,
     required this.name,
     required this.roles,
+    this.phone = '',
     this.joinedAt,
+    this.checkin,
   });
 
   factory CircleMember.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
@@ -40,14 +44,22 @@ class CircleMember {
       uid: doc.id,
       name: d['name'] as String? ?? '',
       roles: List<String>.from(d['roles'] as List? ?? const []),
+      phone: d['phone'] as String? ?? '',
       joinedAt: (d['joinedAt'] as Timestamp?)?.toDate(),
+      checkin: CheckinSettings.fromMap(d['checkin']),
     );
   }
 
   final String uid;
   final String name;
   final List<String> roles;
+
+  /// Shared inside the circle for "Call now".
+  final String phone;
   final DateTime? joinedAt;
+
+  /// Check-in status copied by Cloud Functions (for Guardian Home).
+  final CheckinSettings? checkin;
 }
 
 /// Result of the `createInvite` function.

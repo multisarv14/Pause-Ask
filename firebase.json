@@ -32,6 +32,40 @@
     "ui": {
       "enabled": true
     },
-    "singleProjectMode": true
+    "singleProjectMode": true,
+    "hosting": {
+      "port": 5005
+    }
+  },
+  "hosting": {
+    "public": "site",
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "predeploy": [
+      "node tools/build_site.mjs"
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*"
+    ]
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "pasuse-ask",
+          "appId": "1:531765064232:android:ab85faf68c82d35c82fb1d",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "pasuse-ask",
+          "configurations": {
+            "android": "1:531765064232:android:ab85faf68c82d35c82fb1d"
+          }
+        }
+      }
+    }
   }
 }

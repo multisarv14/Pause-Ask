@@ -5,7 +5,10 @@ import 'core/l10n/language_provider.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/text_scale_provider.dart';
+import 'core/widgets/app_keys.dart';
 import 'l10n/app_localizations.dart';
+import 'services/notifications/notification_service.dart';
+import 'services/share/share_intent_listener.dart';
 
 class PauseAskApp extends ConsumerWidget {
   const PauseAskApp({super.key});
@@ -18,6 +21,7 @@ class PauseAskApp extends ConsumerWidget {
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appName,
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: rootMessengerKey,
       theme: AppTheme.light(),
       locale: ref.watch(localeProvider),
       routerConfig: router,
@@ -27,11 +31,15 @@ class PauseAskApp extends ConsumerWidget {
       builder: (context, child) {
         final mq = MediaQuery.of(context);
         final systemScale = mq.textScaler.scale(1);
-        return MediaQuery(
-          data: mq.copyWith(
-            textScaler: TextScaler.linear(systemScale * textScale),
+        return ShareIntentListener(
+          child: NotificationsBootstrap(
+            child: MediaQuery(
+              data: mq.copyWith(
+                textScaler: TextScaler.linear(systemScale * textScale),
+              ),
+              child: child!,
+            ),
           ),
-          child: child!,
         );
       },
     );

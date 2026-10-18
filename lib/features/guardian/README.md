@@ -1,5 +1,3 @@
 # guardian
 
-Placeholder — not implemented yet (base project step).
-
-Guardian alert + one-tap replies: "STOP – I'll call you" / "I checked, it's OK" / "Call now". Only a guardian can say OK.
+Guardian side of alerts: alert screen (STOP / OK / Call now), Guardian Home list of unanswered circle checks, `guardian_repository.dart` (check streams + `respondToCheck`).

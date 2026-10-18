@@ -11,7 +11,7 @@ service cloud.firestore {
     function isValidUser(d) {
       return d.keys().hasOnly(['name', 'phone', 'roles', 'language', 'largeText',
                                'consentVersion', 'consentAcceptedAt', 'fcmToken',
-                               'createdAt'])
+                               'createdAt', 'checkin'])
         && d.keys().hasAll(['name', 'phone', 'roles', 'language', 'largeText',
                             'consentVersion', 'consentAcceptedAt', 'createdAt'])
         && d.name is string && d.name.size() > 0 && d.name.size() <= 50
@@ -33,15 +33,20 @@ service cloud.firestore {
       allow create: if isOwner(uid)
         && isValidUser(request.resource.data)
         && request.resource.data.phone == request.auth.token.phone_number
-        && request.resource.data.createdAt == request.time;
+        && request.resource.data.createdAt == request.time
+        && !('checkin' in request.resource.data);
 
-      // phone and createdAt can never change.
+      // phone and createdAt can never change. `checkin` (settings, last
+      // check-in, missed alerts) and `roles` are written only by Cloud
+      // Functions. Account deletion: deleteMyAccount.
       allow update: if isOwner(uid)
         && isValidUser(request.resource.data)
         && request.resource.data.phone == resource.data.phone
-        && request.resource.data.createdAt == resource.data.createdAt;
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.get('checkin', null) == resource.data.get('checkin', null)
+        // Roles change only through updateRoles (keeps the circle copy in sync).
+        && request.resource.data.roles == resource.data.roles;
 
-      // Account deletion will go through a Cloud Function later.
       allow delete: if false;
     }
 
@@ -61,8 +66,29 @@ service cloud.firestore {
       }
     }
 
-    // invites, memberships, joinAttempts, checks, usage: functions only
-    // (denied below). Guardian/history access to checks comes in a later step.
+    // Checks: the asker and current members of the check's circle can read
+    // (guardians list them with where('circleId', '==', id)). Only Cloud
+    // Functions write: analyzeCheck creates, respondToCheck sets
+    // guardianResponse, onCheckCreated sets alert.
+    match /checks/{checkId} {
+      allow read: if request.auth != null && (
+        resource.data.uid == request.auth.uid
+        || (resource.data.circleId != null
+            && request.auth.uid in
+               get(/databases/$(database)/documents/circles/$(resource.data.circleId)).data.memberUids)
+      );
+      allow write: if false;
+    }
+
+    // Scam alert feed: any signed-in user can read; items are added from the
+    // Firebase console or the seed script (Admin SDK), never from the app.
+    match /scamFeed/{itemId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // invites, memberships, joinAttempts, usage, sosUsage, _pushLog: functions only
+    // (denied below).
 
     // Everything else stays locked.
     match /{document=**} {

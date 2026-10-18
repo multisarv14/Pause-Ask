@@ -109,9 +109,11 @@ describe("analyzeCheck", () => {
     assert.equal(result.riskLevel, "BE_CAREFUL");
   });
 
-  test("clients cannot read checks or usage directly", async () => {
+  test("owner can read own check; others and usage are blocked", async () => {
     const { checkId } = await U.analyze(check("hello"));
-    await assert.rejects(getDoc(doc(U.db, `checks/${checkId}`)));
+    assert.ok((await getDoc(doc(U.db, `checks/${checkId}`))).exists());
+    const other = await signedIn("someone-else");
+    await assert.rejects(getDoc(doc(other.db, `checks/${checkId}`)));
     await assert.rejects(getDoc(doc(U.db, "usage/checker_20260101")));
   });
 
